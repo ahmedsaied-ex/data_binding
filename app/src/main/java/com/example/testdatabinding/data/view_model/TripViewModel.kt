@@ -8,32 +8,57 @@ import androidx.lifecycle.ViewModel
 import com.example.testdatabinding.repository.TripRepository
 import com.example.testdatabinding.data.model.TripModel
 
-class TripViewModel(private val repo : TripRepository) : ViewModel() {
+class TripViewModel(private val repo: TripRepository) : ViewModel() {
     private val _trips = MutableLiveData<List<TripModel>>()
     val trips: LiveData<List<TripModel>> = _trips
 
     private val _selectedTrip = MutableLiveData<TripModel?>()
-
+    val selectedTripModel: LiveData<TripModel?> = _selectedTrip
 
     init {
-        _trips.value = repo.loadTrips()
+        _trips.value = safeStart()
     }
 
-    fun updateTripLocation(id: String, newLat: Double, newLng: Double) {
-        val currentList = _trips.value?.toMutableList() ?: return
-        val index = currentList.indexOfFirst { it.id == id }
-        if (index != -1) {
-            val updated = currentList[index].copy(lat = newLat, lng = newLng)
-            currentList[index] = updated
-            _trips.value = currentList
-            _selectedTrip.value = if (_selectedTrip.value?.id == id) updated else _selectedTrip.value
-            repo.saveTrips(currentList)
-            Log.d("TRIP_ID_LOG","view model "+_trips.value.toString())
-        }else {
-            Log.e("TripViewModel", "TripModel with ID $id not found")
+    private fun safeStart(): List<TripModel> {
+        return try {
+            repo.loadTrips()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            mutableListOf()
         }
     }
 
+
+    fun updateTripLocation(id: String, newLat: Double, newLng: Double) {
+        try {
+            val currentList = _trips.value?.toMutableList() ?: return
+            val index = currentList.indexOfFirst { it.id == id }
+            if (index != -1) {
+                val updated = currentList[index].copy(lat = newLat, lng = newLng)
+                currentList[index] = updated
+                _trips.value = currentList
+                _selectedTrip.value =
+                    if (_selectedTrip.value?.id == id) updated else _selectedTrip.value
+                repo.saveTrips(currentList)
+                Log.d("TRIP_ID_LOG", "view model " + _trips.value.toString())
+            } else {
+                Log.e("TripViewModel", "TripModel with ID $id not found")
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("TripViewModel", "Error updating trip location: ${e.message}")
+        }
+    }
+
+    fun getTripById(id: String): TripModel? {
+        return try {
+            _trips.value?.find { it.id == id }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 
 
 }
