@@ -2,8 +2,8 @@
 <layout>
     <data>
         <variable
-            name="trip"
-            type="com.example.testdatabinding.data.model.TripModel" />
+            name="viewModel"
+            type="com.example.testdatabinding.data.view_model.DetailsTripViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="132dp"
-        android:text="@{trip.name}"
+        android:text="@{viewModel.trip.name}"
         tools:text="Alexandria"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView4" />
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="@{trip.time}"
+        android:text="@{viewModel.trip.time}"
         tools:text="15-03-2007"
         app:layout_constraintEnd_toEndOf="@+id/tv_trip_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_trip_name" />
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="@{String.valueOf(trip.lat)}"
+        android:text="@{String.valueOf(viewModel.trip.lat)}"
         tools:text="30.2554"
         app:layout_constraintEnd_toEndOf="@+id/tv_trip_date"
         app:layout_constraintTop_toBottomOf="@+id/tv_trip_date" />
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="@{String.valueOf(trip.lng)}"
+        android:text="@{String.valueOf(viewModel.trip.lng)}"
         tools:text="30.2554"
         app:layout_constraintEnd_toEndOf="@+id/tv_trip_lat"
         app:layout_constraintTop_toBottomOf="@+id/tv_trip_lat" />
