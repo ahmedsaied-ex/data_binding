@@ -12,7 +12,7 @@ class TripViewHolder(
 
     fun bind(trip: TripModel) {
         binding.trip  = trip
-
+        binding.executePendingBindings()
         binding.root.setOnClickListener {
             onItemClick(trip)
         }

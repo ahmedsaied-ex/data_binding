@@ -1,17 +1,15 @@
-package com.example.testdatabinding.ui.adapter
-
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-
+import androidx.recyclerview.widget.ListAdapter
 import com.example.testdatabinding.data.model.TripModel
 import com.example.testdatabinding.databinding.ItemTripBinding
+import com.example.testdatabinding.ui.adapter.TripDiffCallback
+import com.example.testdatabinding.ui.adapter.TripViewHolder
 
 class TripAdapter(
-    private val trips: List<TripModel>,
     private val onItemClick: (TripModel) -> Unit
-) : RecyclerView.Adapter<TripViewHolder>() {
+) : ListAdapter<TripModel, TripViewHolder>(TripDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder {
         val binding = ItemTripBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -19,9 +17,8 @@ class TripAdapter(
     }
 
     override fun onBindViewHolder(holder: TripViewHolder, position: Int) {
-        holder.bind(trips[position])
-        Log.d("TRIP_ID_LOG  Binding",trips[position].lat.toString())
+        val trip = getItem(position)
+        holder.bind(trip)
+        Log.d("TRIP_ID_LOG Binding", "Lat: ${trip.lat}, Lng: ${trip.lng}")
     }
-
-    override fun getItemCount() = trips.size
 }
