@@ -13,7 +13,7 @@ class TripViewModel(private val repo: TripRepository) : ViewModel() {
     val trips: LiveData<List<TripModel>> = _trips
 
     private val _selectedTrip = MutableLiveData<TripModel?>()
-    val selectedTripModel: LiveData<TripModel?> = _selectedTrip
+
 
     init {
         _trips.value = safeStart()
@@ -51,14 +51,7 @@ class TripViewModel(private val repo: TripRepository) : ViewModel() {
         }
     }
 
-    fun getTripById(id: String): TripModel? {
-        return try {
-            _trips.value?.find { it.id == id }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
+
 
 
 }
