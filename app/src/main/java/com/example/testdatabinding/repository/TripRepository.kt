@@ -21,7 +21,7 @@ class TripRepository(context: Context) {
             val json = prefs.read(KEY_TRIPS, "null")
              if (json == "null") {
                 val seed = MyTrips.myList
-                saveTrips(seed)
+                saveTrips(list =seed)
                 seed
             } else {
                 gson.fromJson(json, listType) ?: mutableListOf()

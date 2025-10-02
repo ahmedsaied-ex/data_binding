@@ -7,14 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.activityViewModels
 import com.example.testdatabinding.MyOpject
 import com.example.testdatabinding.R
+import com.example.testdatabinding.data.view_model.MapViewModel
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
 class MyBottomSheet : BottomSheetDialogFragment() {
 
+    private val mapStateViewModel: MapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,12 +28,12 @@ class MyBottomSheet : BottomSheetDialogFragment() {
         val editButton = view.findViewById<Button>(R.id.btn_edit)
         val  dismissButton= view.findViewById<Button>(R.id.btn_dismiss)
 
-        editButton.setOnClickListener {
 
-            MyOpject.isAdjustable=true
-            Log.d("TAG_132", "onCreateView: ${MyOpject.isAdjustable}")
+        editButton.setOnClickListener {
+            mapStateViewModel.enableEditing()
             dismiss()
         }
+
 
         dismissButton.setOnClickListener {
 
