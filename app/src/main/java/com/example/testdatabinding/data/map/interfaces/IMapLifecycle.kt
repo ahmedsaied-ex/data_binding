@@ -1,5 +1,5 @@
 package com.example.testdatabinding.data.map.interfaces
 
-interface MapLifecycle {
+interface IMapLifecycle {
     fun cleanup()
 }

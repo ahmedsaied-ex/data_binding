@@ -1,9 +1,9 @@
 package com.example.testdatabinding.data.map.controller
 
 import android.view.View
-import com.example.testdatabinding.data.map.interfaces.LocationHandler
-import com.example.testdatabinding.data.map.interfaces.MapLifecycle
-import com.example.testdatabinding.data.map.interfaces.MarkerHandler
+import com.example.testdatabinding.data.map.interfaces.ILocationHandler
+import com.example.testdatabinding.data.map.interfaces.IMapLifecycle
+import com.example.testdatabinding.data.map.interfaces.IMarkerHandler
 import com.example.testdatabinding.data.model.TripModel
 import com.example.testdatabinding.data.view_model.MapViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -20,7 +20,7 @@ class TripMapController(
     private val rootView: View,
     private val onTripUpdated: (TripModel) -> Unit,
     private val mapViewModel: MapViewModel
-) : MarkerHandler, LocationHandler, MapLifecycle {
+) : IMarkerHandler, ILocationHandler, IMapLifecycle {
 
     private var locationOverlay: MyLocationNewOverlay? = null
     private var currentMarker: Marker? = null

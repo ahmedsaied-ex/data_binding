@@ -1,5 +1,5 @@
 package com.example.testdatabinding.data.map.interfaces
 
-interface LocationHandler {
+interface ILocationHandler {
     fun enableMyLocation()
 }
