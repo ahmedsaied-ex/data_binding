@@ -1,6 +1,7 @@
 package com.example.testdatabinding.data.map.controller
 
 import android.view.View
+import com.example.testdatabinding.data.map.interfaces.IAddLongPressListener
 import com.example.testdatabinding.data.map.interfaces.ILocationHandler
 import com.example.testdatabinding.data.map.interfaces.IMapLifecycle
 import com.example.testdatabinding.data.map.interfaces.IMarkerHandler
@@ -20,12 +21,13 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
     private val rootView: View,
     private val onTripUpdated: (TripModel) -> Unit,
     private val mapViewModel: MapViewModel
-) : IMarkerHandler, ILocationHandler, IMapLifecycle {
+) : IMarkerHandler, ILocationHandler, IMapLifecycle, IAddLongPressListener {
 
     private var locationOverlay: MyLocationNewOverlay? = null
     private var currentMarker: Marker? = null
 
     override fun showTrip(trip: TripModel) {
+        mapView.overlays.removeAll { it is Marker }
         val point = GeoPoint(trip.lat, trip.lng)
         mapView.controller.setZoom(12.0)
         mapView.controller.setCenter(point)
@@ -35,45 +37,41 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
             title = trip.name
         }
         mapView.overlays.add(currentMarker)
-
         addLongPressListener(trip)
     }
 
-    private fun addLongPressListener(trip: TripModel) {
+    override fun addLongPressListener(trip: TripModel) {
         val overlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean = false
-
             override fun longPressHelper(p: GeoPoint?): Boolean {
                 val isEditable = mapViewModel.isAdjustable.value ?: false
                 if (!isEditable) {
                     Snackbar.make(rootView, "Can't be edited", Snackbar.LENGTH_SHORT).show()
                     return false
                 }
-
                 p?.let { geoPoint ->
-                    // remove old marker
-                    currentMarker?.let { mapView.overlays.remove(it) }
 
-                    // add new marker
                     currentMarker = Marker(mapView).apply {
                         position = geoPoint
-                        title = "New Marker"
+                        title=trip.name
                     }
+
                     mapView.overlays.add(currentMarker)
-                    mapView.controller.setCenter(geoPoint)
+                    mapView.invalidate()
 
                     Snackbar.make(
                         rootView,
-                        "lat: ${geoPoint.latitude}, lng: ${geoPoint.longitude}",
+                        "lat: ${geoPoint.latitude}, \nlng: ${geoPoint.longitude}",
                         Snackbar.LENGTH_SHORT
                     ).show()
 
-                    // update trip.
                     onTripUpdated(trip.copy(lat = geoPoint.latitude, lng = geoPoint.longitude))
+
                 }
                 return true
             }
-        })
+        }
+        )
         mapView.overlays.add(0, overlay)
     }
 
