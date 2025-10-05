@@ -15,10 +15,8 @@ class TripAdapter(
         val binding = ItemTripBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TripViewHolder(binding, onItemClick)
     }
-
     override fun onBindViewHolder(holder: TripViewHolder, position: Int) {
         val trip = getItem(position)
         holder.bind(trip)
-        Log.d("TRIP_ID_LOG Binding", "Lat: ${trip.lat}, Lng: ${trip.lng}")
     }
 }
