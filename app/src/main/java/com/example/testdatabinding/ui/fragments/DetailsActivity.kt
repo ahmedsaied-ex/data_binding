@@ -16,7 +16,6 @@ class DetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailsBinding
     private val tripViewModel: DetailsTripViewModel by viewModels()
-
     private val navigator = DetailsNavigationImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,11 +25,9 @@ class DetailsActivity : AppCompatActivity() {
         binding.viewModel = tripViewModel
         binding.lifecycleOwner = this
 
-        // ✅ init trip via ViewModel
         val initTrip = intent.getParcelableExtra<TripModel>(Constants.TRIP)
         tripViewModel.initTrip(initTrip)
 
-        // ✅ register navigation callback
         navigator.register(this) { updatedTrip ->
             tripViewModel.updateTrip(updatedTrip)
         }
