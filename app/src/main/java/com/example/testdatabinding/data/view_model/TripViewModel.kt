@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-
 import com.example.testdatabinding.repository.TripRepository
 import com.example.testdatabinding.data.model.TripModel
 
@@ -13,6 +12,9 @@ class TripViewModel(private val repo: TripRepository) : ViewModel() {
     val trips: LiveData<List<TripModel>> = _trips
 
     private val _selectedTrip = MutableLiveData<TripModel?>()
+
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> = _errorMessage
 
 
     init {
@@ -24,7 +26,9 @@ class TripViewModel(private val repo: TripRepository) : ViewModel() {
             repo.loadTrips()
         } catch (e: Exception) {
             e.printStackTrace()
+            _errorMessage.value = "Error loading trips: ${e.message}"
             mutableListOf()
+
         }
     }
 
@@ -48,6 +52,7 @@ class TripViewModel(private val repo: TripRepository) : ViewModel() {
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("TripViewModel", "Error updating trip location: ${e.message}")
+            _errorMessage.value = "Error updating trip location: ${e.message}"
         }
     }
 

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testdatabinding.App
+import com.example.testdatabinding.R
 import com.example.testdatabinding.constants.Constants
 import com.example.testdatabinding.data.map.interfaces.ITripNavigatorHome
 import com.example.testdatabinding.data.model.TripModel
@@ -18,26 +19,18 @@ import com.example.testdatabinding.data.view_model.TripViewModel
 import com.example.testdatabinding.data.view_model.TripViewModelFactory
 import com.example.testdatabinding.databinding.FragmentHomeBinding
 import com.example.testdatabinding.navigation.HomeNavigationImpl
-
-
-
-
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
     private val tripViewModel: TripViewModel by viewModels {
         TripViewModelFactory(requireActivity().application as App)
     }
-
     private lateinit var tripAdapter: TripAdapter
     private lateinit var navigator: ITripNavigatorHome
-
-
-    private val detailsLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val detailsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
                 val updatedTrip = result.data?.getParcelableExtra<TripModel>(Constants.TRIP_RESULT)
                 updatedTrip?.let {
@@ -60,9 +53,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         navigator = HomeNavigationImpl(detailsLauncher)
-
 
         tripAdapter = TripAdapter { trip ->
             navigator.openActivity(requireContext(), trip) { updatedTrip ->
@@ -75,10 +66,24 @@ class HomeFragment : Fragment() {
         }
 
         binding.rvTrips.layoutManager = LinearLayoutManager(requireContext())
+
         binding.rvTrips.adapter = tripAdapter
+
+
 
         tripViewModel.trips.observe(viewLifecycleOwner) { trips ->
             tripAdapter.submitList(trips)
+        }
+
+
+        tripViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Error")
+                .setMessage("An Error accured $errorMessage")
+                .setNeutralButton("Ok") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
 
