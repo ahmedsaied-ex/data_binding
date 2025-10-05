@@ -31,8 +31,7 @@ class MapsActivity : AppCompatActivity() {
     private var trip: TripModel? = null
 
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 tripMapController.enableMyLocation()
             } else {
@@ -43,13 +42,12 @@ class MapsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Load OSMdroid configuration
+
         Configuration.getInstance().load(
             applicationContext,
             PreferenceManager.getDefaultSharedPreferences(applicationContext)
         )
         Configuration.getInstance().userAgentValue = packageName
-
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -62,13 +60,15 @@ class MapsActivity : AppCompatActivity() {
         osmMap.setMultiTouchControls(true)
         osmMap.setTileSource(org.osmdroid.tileprovider.tilesource.TileSourceFactory.MAPNIK)
 
-
         tripMapController = TripMapController(
-            osmMap,
-            binding.root,
-            { updatedTrip -> trip = updatedTrip },
-            mapViewModel
+            mapView = osmMap,
+            rootView = binding.root,
+            onTripUpdated = { updatedTrip ->
+                trip = updatedTrip
+            },
+            mapViewModel = mapViewModel
         )
+
 
 
         trip?.let { tripMapController.showTrip(it) }

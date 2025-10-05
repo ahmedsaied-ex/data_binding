@@ -12,12 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testdatabinding.App
 import com.example.testdatabinding.constants.Constants
+import com.example.testdatabinding.data.map.interfaces.ITripNavigatorHome
 import com.example.testdatabinding.data.model.TripModel
 import com.example.testdatabinding.data.view_model.TripViewModel
 import com.example.testdatabinding.data.view_model.TripViewModelFactory
 import com.example.testdatabinding.databinding.FragmentHomeBinding
 import com.example.testdatabinding.navigation.HomeNavigationImpl
-import com.example.testdatabinding.navigation.ITripNavigatorHome
+
 
 
 

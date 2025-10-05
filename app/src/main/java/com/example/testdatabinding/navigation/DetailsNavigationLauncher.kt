@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.testdatabinding.constants.Constants
 import com.example.testdatabinding.data.model.TripModel
 import com.example.testdatabinding.ui.fragments.DetailsActivity

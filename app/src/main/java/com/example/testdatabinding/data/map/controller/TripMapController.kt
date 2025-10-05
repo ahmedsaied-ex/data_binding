@@ -15,7 +15,7 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
-class TripMapController(
+ class TripMapController(
     private val mapView: MapView,
     private val rootView: View,
     private val onTripUpdated: (TripModel) -> Unit,
@@ -47,7 +47,7 @@ class TripMapController(
                 val isEditable = mapViewModel.isAdjustable.value ?: false
                 if (!isEditable) {
                     Snackbar.make(rootView, "Can't be edited", Snackbar.LENGTH_SHORT).show()
-                    return false   // 👈 let zoom/pan still work
+                    return false
                 }
 
                 p?.let { geoPoint ->
@@ -68,10 +68,10 @@ class TripMapController(
                         Snackbar.LENGTH_SHORT
                     ).show()
 
-                    // update trip
+                    // update trip.
                     onTripUpdated(trip.copy(lat = geoPoint.latitude, lng = geoPoint.longitude))
                 }
-                return true   // 👈 consume only when editing
+                return true
             }
         })
         mapView.overlays.add(0, overlay)
@@ -85,6 +85,6 @@ class TripMapController(
 
     override fun cleanup() {
         locationOverlay = null
-        mapViewModel.disableEditing() // reset edit mode when cleaning up
+        mapViewModel.disableEditing()
     }
 }
